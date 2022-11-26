@@ -1017,6 +1017,20 @@ RUN set -eux \
 	&& rm -f /usr/local/etc/php/conf.d/docker-php-ext-phalcon.ini || true \
 	&& rm -f /usr/local/etc/php/conf.d/docker-php-ext-psr.ini || true \
 
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# COPY /.devcontainer/config/php.ini /usr/local/etc/php/conf.d
+
+# RUN pecl config-set php_ini "${PHP_INI_DIR}/php.ini"
+
+# Clean up, try to reduce image size (much as you can on Debian..)
+RUN apt-get autoremove -y \
+&& apt-get clean all \
+&& rm -rvf /var/lib/apt/lists/* \
+&& rm -rvf /usr/share/doc /usr/share/man /usr/share/locale \
+&& rm -fv /usr/local/etc/php-fpm.d/*.conf \
+&& rm -rvf /usr/src/php
+
 
 ###
 ### Ports
